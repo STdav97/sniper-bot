@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from utils import get_recent_tokens_sui, get_recent_tokens_avax
 from keep_alive import keep_alive
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from utils import update_filters
 
 load_dotenv()
 
@@ -21,6 +22,35 @@ async def send_welcome(message: Message):
 @dp.message(Command("snip"))
 async def send_tokens(message: Message):
     await message.answer("🔍 Je récupère les tokens récents...")
+    @dp.message(Command("filter"))
+async def set_filter(message: Message):
+    try:
+        parts = message.text.split()
+        lp = volume = holders = None
+
+        for p in parts[1:]:
+            if "lp>" in p:
+                lp = int(p.replace("lp>", ""))
+            elif "volume>" in p:
+                volume = int(p.replace("volume>", ""))
+            elif "holders<" in p:
+                holders = int(p.replace("holders<", ""))
+
+        update_filters(lp, volume, holders)
+
+        await message.answer(
+            f"✅ Filtres mis à jour :\n"
+            f"- LP ≥ {lp or 'inchangé'}\n"
+            f"- Volume ≥ {volume or 'inchangé'}\n"
+            f"- Holders < {holders or 'inchangé'}"
+        )
+
+    except Exception as e:
+        await message.answer(
+            "❌ Erreur dans la commande. Exemple correct :\n"
+            "`/filter lp>2000 volume>1500 holders<400`",
+            parse_mode="Markdown"
+        )
 
     sui_tokens = get_recent_tokens_sui()
     avax_tokens = get_recent_tokens_avax()
