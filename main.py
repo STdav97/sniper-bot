@@ -4,10 +4,9 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message
 from aiogram.filters.command import Command
 from dotenv import load_dotenv
-from utils import get_recent_tokens_sui, get_recent_tokens_avax
+from utils import get_recent_tokens_sui, get_recent_tokens_avax, update_filters
 from keep_alive import keep_alive
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from utils import update_filters
 
 load_dotenv()
 
@@ -15,14 +14,13 @@ TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
+# ✅ Commande /start
 @dp.message(Command("start"))
 async def send_welcome(message: Message):
     await message.answer("🚀 Sniper Bot activé. Surveillance AVAX & SUI démarrée.")
 
-@dp.message(Command("snip"))
-async def send_tokens(message: Message):
-    await message.answer("🔍 Je récupère les tokens récents...")
-    @dp.message(Command("filter"))
+# ✅ Commande /filter
+@dp.message(Command("filter"))
 async def set_filter(message: Message):
     try:
         parts = message.text.split()
@@ -52,6 +50,11 @@ async def set_filter(message: Message):
             parse_mode="Markdown"
         )
 
+# ✅ Commande /snip
+@dp.message(Command("snip"))
+async def send_tokens(message: Message):
+    await message.answer("🔍 Je récupère les tokens récents...")
+
     sui_tokens = get_recent_tokens_sui()
     avax_tokens = get_recent_tokens_avax()
 
@@ -77,10 +80,12 @@ async def set_filter(message: Message):
             reply_markup=btn
         )
 
+# ✅ Lancer le bot
 async def main():
     keep_alive()
     await dp.start_polling(bot)
 
 if __name__ == '__main__':
     asyncio.run(main())
+
 
