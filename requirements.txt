@@ -2,3 +2,8 @@ aiogram
 requests
 python-dotenv
 flask
+aiogram
+requests
+python-dotenv
+flask
+web3             # ← pour AVAX / MetaMask simulation
