@@ -60,9 +60,9 @@ async def send_tokens(message: Message):
 
     # SUI tokens
     for token in sui_tokens:
-        btn = InlineKeyboardMarkup().add(
-            InlineKeyboardButton("🚀 SNIPE", url=token['link'])
-        )
+        btn = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🚀 SNIPE", url=token['link'])]
+        ])
         await message.answer(
             f"💎 Token : {token['name']} (SUI)\n🔗 [Voir sur GeckoTerminal]({token['link']})",
             parse_mode="Markdown",
@@ -71,9 +71,9 @@ async def send_tokens(message: Message):
 
     # AVAX tokens
     for token in avax_tokens:
-        btn = InlineKeyboardMarkup().add(
-            InlineKeyboardButton("🚀 SNIPE", url=token['link'])
-        )
+        btn = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🚀 SNIPE", url=token['link'])]
+        ])
         await message.answer(
             f"💎 Token : {token['name']} (AVAX)\n🔗 [Voir sur GeckoTerminal]({token['link']})",
             parse_mode="Markdown",
@@ -82,9 +82,9 @@ async def send_tokens(message: Message):
 
     # XRP tokens
     for token in xrp_tokens:
-        btn = InlineKeyboardMarkup().add(
-            InlineKeyboardButton("🚀 SNIPE", url=token['link'])
-        )
+        btn = InlineKeyboardMarkup(inline_keyboard=[
+            [InlineKeyboardButton(text="🚀 SNIPE", url=token['link'])]
+        ])
         await message.answer(
             f"💎 Token : {token['name']} (XRP)\n🔗 [Voir sur GeckoTerminal]({token['link']})",
             parse_mode="Markdown",
@@ -98,5 +98,4 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-
 
