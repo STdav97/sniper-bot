@@ -10,6 +10,7 @@ from keep_alive import keep_alive
 from storage import save_token
 from report import router as report_router
 from commands_simulation import router as simulation_router  # Pour /simulate_avax, /simulate_sui, /simulate_all
+from wallets import set_wallet, get_wallet
 
 load_dotenv()
 
@@ -132,6 +133,49 @@ async def faucet_sui(message: Message):
         "⚠️ Colle ton adresse SUI et clique sur *'Get SUI Tokens'*",
         parse_mode="Markdown"
     )
+
+# ✅ Commande /set_wallet
+@dp.message(Command("set_wallet"))
+async def handle_set_wallet(message: Message):
+    try:
+        parts = message.text.split()
+        if len(parts) != 3:
+            raise ValueError("Format incorrect")
+        
+        network = parts[1].lower()
+        address = parts[2]
+
+        if network not in ["avax", "sui"]:
+            await message.answer("❌ Réseau non reconnu. Utilise 'avax' ou 'sui'.")
+            return
+        
+        set_wallet(message.from_user.id, network, address)
+        await message.answer(f"✅ Wallet {network.upper()} enregistré avec succès !")
+
+    except Exception:
+        await message.answer("❌ Format incorrect.\nExemple : `/set_wallet avax 0xABC...`", parse_mode="Markdown")
+
+# ✅ Commande /claim_all
+@dp.message(Command("claim_all"))
+async def claim_all(message: Message):
+    user_id = message.from_user.id
+    sui_address = get_wallet(user_id, "sui")
+    avax_address = get_wallet(user_id, "avax")
+
+    response = "💧 *Requêtes faucet :*\n\n"
+
+    if sui_address:
+        response += f"🔹 *SUI* → [Lien](https://faucet.testnet.sui.io/) pour `{sui_address}`\n"
+    else:
+        response += "🔹 *SUI* → ❌ Adresse manquante\n"
+
+    if avax_address:
+        response += f"🔹 *AVAX* → [Lien](https://faucet.avax.network/) pour `{avax_address}`\n"
+    else:
+        response += "🔹 *AVAX* → ❌ Adresse manquante\n"
+
+    await message.answer(response, parse_mode="Markdown")
+
 
 # ✅ Commande /faucet_avax
 @dp.message(Command("faucet_avax"))
