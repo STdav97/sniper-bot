@@ -4,13 +4,12 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.filters.command import Command
 from dotenv import load_dotenv
+
 from utils import get_recent_tokens_sui, get_recent_tokens_avax, get_recent_tokens_xrp, update_filters
 from keep_alive import keep_alive
 from storage import save_token
-
-# ✅ Import des routes de commandes externes
 from report import router as report_router
-from commands_simulation import router as simulation_router  # Pour /simulate_avax et /simulate_sui
+from commands_simulation import router as simulation_router  # Pour /simulate_avax, /simulate_sui, /simulate_all
 
 load_dotenv()
 
@@ -18,15 +17,9 @@ TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-# ✅ Enregistrement des routes
+# ✅ Enregistre les routes externes
 dp.include_router(report_router)
 dp.include_router(simulation_router)
-
-load_dotenv()
-
-TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-bot = Bot(token=TOKEN)
-dp = Dispatcher()
 
 # ✅ Commande /start
 @dp.message(Command("start"))
@@ -130,6 +123,26 @@ async def send_tokens(message: Message):
             reply_markup=btn
         )
 
+# ✅ Commande /faucet_sui
+@dp.message(Command("faucet_sui"))
+async def faucet_sui(message: Message):
+    await message.answer(
+        "💧 *SUI Testnet Faucet :*\n\n"
+        "👉 https://faucet.testnet.sui.io/\n"
+        "⚠️ Colle ton adresse SUI et clique sur *'Get SUI Tokens'*",
+        parse_mode="Markdown"
+    )
+
+# ✅ Commande /faucet_avax
+@dp.message(Command("faucet_avax"))
+async def faucet_avax(message: Message):
+    await message.answer(
+        "💧 *AVAX Fuji Testnet Faucet :*\n\n"
+        "👉 https://faucet.avax.network/\n"
+        "🔗 Sélectionne *Fuji C-Chain*, colle ton adresse MetaMask, puis clique sur *'Request AVAX'*",
+        parse_mode="Markdown"
+    )
+
 # ✅ Lancer le bot
 async def main():
     keep_alive()
@@ -137,5 +150,6 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+
 
 
