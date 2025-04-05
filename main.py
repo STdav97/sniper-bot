@@ -8,6 +8,20 @@ from utils import get_recent_tokens_sui, get_recent_tokens_avax, get_recent_toke
 from keep_alive import keep_alive
 from storage import save_token
 
+# ✅ Import des routes de commandes externes
+from report import router as report_router
+from commands_simulation import router as simulation_router  # Pour /simulate_avax et /simulate_sui
+
+load_dotenv()
+
+TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
+# ✅ Enregistrement des routes
+dp.include_router(report_router)
+dp.include_router(simulation_router)
+
 load_dotenv()
 
 TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
