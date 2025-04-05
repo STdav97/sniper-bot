@@ -6,6 +6,7 @@ from aiogram.filters.command import Command
 from dotenv import load_dotenv
 from utils import get_recent_tokens_sui, get_recent_tokens_avax, get_recent_tokens_xrp, update_filters
 from keep_alive import keep_alive
+from storage import save_token
 
 load_dotenv()
 
@@ -60,6 +61,14 @@ async def send_tokens(message: Message):
 
     # SUI tokens
     for token in sui_tokens:
+        save_token({
+            "name": token['name'],
+            "network": "SUI",
+            "volume": token.get("volume", 0),
+            "lp": token.get("liquidity", 0),
+            "holders": token.get("holders", 0),
+            "link": token['link']
+        })
         btn = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="🚀 SNIPE", url=token['link'])]
         ])
@@ -71,6 +80,14 @@ async def send_tokens(message: Message):
 
     # AVAX tokens
     for token in avax_tokens:
+        save_token({
+            "name": token['name'],
+            "network": "AVAX",
+            "volume": token.get("volume", 0),
+            "lp": token.get("liquidity", 0),
+            "holders": token.get("holders", 0),
+            "link": token['link']
+        })
         btn = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="🚀 SNIPE", url=token['link'])]
         ])
@@ -82,6 +99,14 @@ async def send_tokens(message: Message):
 
     # XRP tokens
     for token in xrp_tokens:
+        save_token({
+            "name": token['name'],
+            "network": "XRP",
+            "volume": token.get("volume", 0),
+            "lp": token.get("liquidity", 0),
+            "holders": token.get("holders", 0),
+            "link": token['link']
+        })
         btn = InlineKeyboardMarkup(inline_keyboard=[
             [InlineKeyboardButton(text="🚀 SNIPE", url=token['link'])]
         ])
@@ -98,4 +123,5 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
+
 
