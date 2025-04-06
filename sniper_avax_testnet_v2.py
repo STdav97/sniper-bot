@@ -1,6 +1,30 @@
 import random
 import time
 from storage import save_token
+import json
+
+# 👇 Fusion automatique dans snipes_log.json
+def merge_to_global_log(token_data):
+    try:
+        with open("snipes_log.json", "r") as f:
+            existing = json.load(f)
+    except FileNotFoundError:
+        existing = []
+
+    existing.append(token_data)
+    with open("snipes_log.json", "w") as f:
+        json.dump(existing, f, indent=2)
+
+merge_to_global_log({
+    "name": "AVAXTEST",
+    "network": "AVAX",
+    "volume": volume,
+    "lp": liquidity,
+    "holders": holders,
+    "gain": gain,
+    "link": "https://www.geckoterminal.com/avax/pools/0x123abc"
+})
+
 
 # Simule des tokens récents sur AVAX testnet avec données dynamiques
 def simulate_token_data_avax():
