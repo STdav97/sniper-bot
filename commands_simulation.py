@@ -3,6 +3,8 @@
 from aiogram import Router, types
 from aiogram.filters.command import Command
 import subprocess
+from sniper_avax_testnet_v2 import run_avax_simulation
+
 
 router = Router()
 
