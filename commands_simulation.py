@@ -20,10 +20,8 @@ async def simulate_avax_handler(message: types.Message):
 
             for token in avax_tokens:
                 text = (
-                    f"💎 Token : {token['name']} (AVAX)
-"
-                    f"📊 Gain simulé : x{token['gain']}
-"
+                    f"💎 Token : {token['name']} (AVAX)\n"
+                    f"📊 Gain simulé : x{token['gain']}\n"
                     f"🔗 [Voir sur GeckoTerminal]({token['link']})"
                 )
                 btn = InlineKeyboardMarkup(inline_keyboard=[
@@ -32,6 +30,7 @@ async def simulate_avax_handler(message: types.Message):
                 await message.answer(text, parse_mode="Markdown", reply_markup=btn)
     except Exception as e:
         await message.answer(f"❌ Erreur lecture fichier : {e}")
+
 
 # 🔹 /simulate_sui
 @router.message(Command("simulate_sui"))
