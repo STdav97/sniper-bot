@@ -20,10 +20,10 @@ async def simulate_avax_handler(message: types.Message):
                 text = (
                     f"💎 Token : {token['name']} (AVAX)\n"
                     f"📊 Gain simulé : +{token['gain']}%\n"
-                    f"🔗 [Voir sur GeckoTerminal]({token['link']})"
+                    f"🔗 [Voir sur DexScreener]({token['link']})"
                 )
                 btn = InlineKeyboardMarkup(inline_keyboard=[
-                    [InlineKeyboardButton(text="🚀 BUY NOW", url=token["link"])]
+                    [InlineKeyboardButton(text="🚀 BUY NOW (DexScreener)", url=token["link"])]
                 ])
                 await message.answer(text, parse_mode="Markdown", reply_markup=btn)
 
