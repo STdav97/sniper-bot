@@ -1,19 +1,8 @@
-import requests
-
-# Filtres dynamiques
-FILTERS = {
-    "lp_min": 3000,
-    "volume_min": 1000,
-    "holders_max": 500
+DEX_NETWORKS = {
+    "avax": "avalanche",
+    "sui-network": "sui",
+    "xrp": "xrp"
 }
-
-def update_filters(lp=None, volume=None, holders=None):
-    if lp is not None:
-        FILTERS["lp_min"] = lp
-    if volume is not None:
-        FILTERS["volume_min"] = volume
-    if holders is not None:
-        FILTERS["holders_max"] = holders
 
 def get_recent_tokens(network):
     try:
@@ -29,7 +18,10 @@ def get_recent_tokens(network):
             attr = token['attributes']
             name = attr['name']
             address = attr['address']
-            link = f"https://www.geckoterminal.com/{network}/pools/{address}"
+
+            dex_network = DEX_NETWORKS.get(network, network)
+            link = f"https://dexscreener.com/{dex_network}/{address}"
+
             volume = float(attr.get("volume_usd", {}).get("h24", 0))
             liquidity = float(attr.get("reserve_in_usd", 0))
             holders = int(attr.get("pool_token_holders", 0))
@@ -54,12 +46,4 @@ def get_recent_tokens(network):
 
     return tokens
 
-def get_recent_tokens_sui():
-    return get_recent_tokens("sui-network")
-
-def get_recent_tokens_avax():
-    return get_recent_tokens("avax")
-
-def get_recent_tokens_xrp():
-    return get_recent_tokens("xrp")
 
