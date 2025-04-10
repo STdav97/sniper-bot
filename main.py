@@ -11,6 +11,9 @@ from storage import save_token
 from report import router as report_router
 from commands_simulation import router as simulation_router  # Pour /simulate_avax, /simulate_sui, /simulate_all
 from wallets import set_wallet, get_wallet
+from commands import router as commands_router
+dp.include_router(commands_router)
+
 
 load_dotenv()
 
