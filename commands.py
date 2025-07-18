@@ -111,4 +111,13 @@ async def report_handler(message: types.Message):
         await message.answer(response, parse_mode="Markdown")
 
     except Exception as e:
-        await message.answer(f"\u274c Erreur lors du rapport : {e}")
+        await message.answer(f"\u274c Erreur lors du rapport : {e}") 
+        from aiogram import types
+from aiogram.filters.command import Command
+
+@router.message(Command("flash_arb"))
+async def cmd_flash_arb(message: types.Message):
+    # Ici, tu peux appeler ta fonction d’exécution de smart contract (Web3.py)
+    result = await execute_flash_loan_contract()
+    await message.reply(f"Flash loan exécuté ! Résultat : {result}")
+
